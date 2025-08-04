@@ -33,6 +33,14 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven
+    - name: Download and Setup Maven
+      shell: pwsh
+      run: |
+         $url = "https://downloads.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.zip"
+         Invoke-WebRequest -Uri $url -OutFile "maven.zip"
+         Expand-Archive -Path "maven.zip" -DestinationPath "$PWD\maven"
+         $env:PATH="$PWD\maven\apache-maven-3.9.6\bin;$env:PATH"
+         mvn -v
 
     - name: Build and test with Maven
       run: mvn clean install
