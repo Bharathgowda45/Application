@@ -41,19 +41,7 @@ jobs:
         name: app-jar
         path: target/*.jar
 
-    - name: Deploy to Remote Server via SSH
-      if: success()
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SERVER_USER: ${{ secrets.SERVER_USER }}
-        SERVER_IP: ${{ secrets.SERVER_IP }}
-      run: |
-        echo "$SSH_PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -i private_key target/*.jar $SERVER_USER@$SERVER_IP:/home/$SERVER_USER/app.jar
-        ssh -i private_key $SERVER_USER@$SERVER_IP << 'EOF'
-          pkill -f 'java -jar' || true
-          nohup java -jar /home/$SERVER_USER/app.jar > app.log 2>&1 &
-        EOF
+   
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
