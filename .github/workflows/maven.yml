@@ -17,7 +17,9 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
+    - name: Set PowerShell Execution Policy
+      run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+      shell: pwsh
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
